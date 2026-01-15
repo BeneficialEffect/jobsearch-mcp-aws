@@ -1,0 +1,24 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: 'JobSearch MCP Server Infrastructure'
+
+Parameters:
+  Environment:
+    Type: String
+    Default: dev
+    AllowedValues: [dev, staging, prod]
+
+Resources:
+  JobSearchBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub 'jobsearch-mcp-${Environment}-${AWS::AccountId}'
+      BucketEncryption:
+        ServerSideEncryptionConfiguration:
+          - ServerSideEncryptionByDefault:
+              SSEAlgorithm: AES256
+
+Outputs:
+  BucketName:
+    Value: !Ref JobSearchBucket
+    Export:
+      Name: !Sub '${AWS::StackName}-BucketName'
