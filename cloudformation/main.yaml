@@ -17,8 +17,29 @@ Resources:
           - ServerSideEncryptionByDefault:
               SSEAlgorithm: AES256
 
+  JobSearchMCPFunction:
+    Type: AWS::Lambda::Function
+    Properties:
+      FunctionName: !Sub 'jobsearch-mcp-${Environment}'
+      Runtime: python3.9
+      Handler: server.lambda_handler
+      Code:
+        ZipFile: |
+          # Placeholder - deploy with actual code
+          def lambda_handler(event, context):
+              return {'statusCode': 200, 'body': 'MCP Server'}
+      Environment:
+        Variables:
+          ENVIRONMENT: !Ref Environment
+      Timeout: 30
+
 Outputs:
   BucketName:
     Value: !Ref JobSearchBucket
     Export:
       Name: !Sub '${AWS::StackName}-BucketName'
+  
+  LambdaFunctionArn:
+    Value: !GetAtt JobSearchMCPFunction.Arn
+    Export:
+      Name: !Sub '${AWS::StackName}-LambdaArn'
